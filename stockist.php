@@ -99,6 +99,7 @@ class Stockist
         add_action('wp_ajax_delete_district', array($this, 'delete_district_by_id'));
         add_action('wp_ajax_username_exists', 'json_is_name_valid');
         add_action('wp_ajax_reserved_id', 'json_stockist_reserved_id');
+        add_action('wp_ajax_stockist_bonus_register', 'ajax_save_stockist_registration_bonus');
     }
     
     private function _loadDefault()
@@ -127,6 +128,8 @@ class Stockist
         $this->menu_page = add_menu_page('Stockist', 'Stockist', 'manage_options', 'mc_stockist', 
                 array(&$this,'panelAdminSettings'), $this->plugin_uri.'img/store-16.png',59);
 
+        $this->register_default_page_hook($this->menu_page);
+
         $this->page['add'] = add_submenu_page('mc_stockist','New Stockist', 'Add Stockist', 'manage_options', 'mc_stockist_add', array(&$this,'panel_add'));
               
         $this->page['settings'] = add_submenu_page('mc_stockist','Stockist Settings', 'Settings', 'manage_options', 'mc_stockist_settings', array(&$this,'panelStockistSettings'));
@@ -149,6 +152,9 @@ class Stockist
         switch($hook){
             case $this->page['add']:
                 add_action('admin_print_scripts-' . $hook, array(&$this,'admin_scripts_add_stockist') );
+                break;
+            case $this->menu_page:
+                add_action('list_stockist_body','mc_render_stockist_page');
                 break;
         }
     }
@@ -798,6 +804,32 @@ class Stockist
         $title  = 'Database Settings';
         $cb     = 'mb_view_stockist_general_options';
         add_meta_box($mid, $title, $cb, $hook, 'normal', 'high', $args);
+
+        /*  side screen normal */
+        $mid    = 'opt_stockist_register_bonus';
+        $title  = 'Stockist Registration Bonus';
+        $cb     = 'mb_view_stockist_register_bonus_options';
+        add_meta_box($mid, $title, $cb, $hook, 'side', 'high', $args);
+
+        $mid    = 'opt_stockist_sales_bonus';
+        $title  = 'Stockist Sales Bonus';
+        $cb     = 'mb_view_stockist_sales_bonus_options';
+        add_meta_box($mid, $title, $cb, $hook, 'side', 'low', $args);
+
+        if ($_REQUEST['page'] == 'mc_stockist_settings'){
+
+            if (isset($_REQUEST['panel'])){
+                if ($_REQUEST['panel'] == 'general-settings'){
+                    wp_enqueue_script( 'general-settings' );
+                }
+            } else {
+                wp_enqueue_script( 'general-settings' );
+            }
+
+        }
+
+
+
     }
 
     public function district_settings_metabox($hook, $args)
@@ -873,6 +905,10 @@ class Stockist
 
         $src = plugins_url('/js/form-validation.js', __FILE__);
         wp_register_script('stockist-validation', $src, array('jquery'),false,true);
+
+        $src = plugins_url('/js/general-settings.js', __FILE__);
+        wp_register_script('general-settings', $src, array('jquery','jquery-mask'),false,true);
+
     }
     
     public function admin_styles()
@@ -886,7 +922,8 @@ class Stockist
         wp_enqueue_script( 'thickbox' );
     }
 
-    public function admin_scripts_add_stockist(){
+    public function admin_scripts_add_stockist()
+    {
         wp_enqueue_script( 'jquery-mask' );
         wp_enqueue_script( 'stockist-validation' );
     }
