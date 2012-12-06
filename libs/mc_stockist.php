@@ -12,7 +12,8 @@ function stockist_list_tabs( $current = 'general' ) {
     $tabs = array(
         'general-list'   => 'All Stockist',
         'state-list'     => 'State',
-        'district-list'  => 'District'
+        'district-list'  => 'District',
+        'mobile-list'  => 'Mobile',
     );
 
     echo '<div id="icon-stockist" class="icon32"><br></div>';
