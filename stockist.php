@@ -21,26 +21,7 @@ class Stockist
     public $id;
     
     public $page = array();
-    
-    /**
-     *  stockist type usermeta keys
-     */
-    const MK_USERTYPE_STOCKIST = 'user_type_option_stokis';
-    
-    const MK_STATE_STOCKIST = 'jenis_stokis_option_stokis-negeri';
-    
-    const MK_CITY_STOCKIST = 'jenis_stokis_option_stokis-daerah';
-    
-    const MK_MOBILE_STOCKIST = 'jenis_stokis_option_stokis-mobile';
-    
-    const MK_STOCKIST_ID = 'stockist_id';
-    
-    /**
-     * Error Message
-     */
-     
-     const ERR_NO_STATE_STOCKIST = 'Error, No state stockist available';
-    
+
     /**
      * stockist role 
      * @var mixed|array
@@ -951,9 +932,9 @@ class Stockist
         
         $sql = "SELECT `user_id` FROM $table WHERE `meta_key`=%s ORDER BY `user_id` DESC";
         
-        $results = $wpdb->get_results($wpdb->prepare($sql, self::MK_USERTYPE_STOCKIST));
+        $results = $wpdb->get_results($wpdb->prepare($sql, SKTYPE::MK_USERTYPE_STOCKIST));
         
-        if (!$results) return self::ERR_NO_STATE_STOCKIST;
+        if (!$results) return SKTYPE::ERR_NO_STATE_STOCKIST;
             
         // check return array for our loop            
         if ( has_count($results) ){
@@ -1002,9 +983,9 @@ class Stockist
         
         $sql = "SELECT user_id FROM $table WHERE `meta_key`=%s ORDER BY `user_id` DESC";
         
-        $results = $wpdb->get_results($wpdb->prepare($sql, self::MK_STATE_STOCKIST));
+        $results = $wpdb->get_results($wpdb->prepare($sql, SKTYPE::MK_STATE_STOCKIST));
         
-        if (! $results) return self::ERR_NO_STATE_STOCKIST;
+        if (! $results) return SKTYPE::ERR_NO_STATE_STOCKIST;
             
         // check return array for our loop            
         if ( has_count($results) ){
