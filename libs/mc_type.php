@@ -130,6 +130,8 @@ final class SKTYPE
     const ERR_LOGIN_EXISTS          = "Username taken, <b>%s</b> is not available. Please choose different login name.";
 
     const ERR_PWD_UNMATCHED         = "Unmatched <b>Password</b>, please re-enter your password again.";
+
+    const ERR_NO_STATE_STOCKIST     = 'Error, No state stockist available';
     /**
      * nonces
      */

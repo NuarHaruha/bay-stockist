@@ -69,7 +69,7 @@ function average_stockist_sales($stockist_id){
     $stockist_id = (int) $stockist_id;
     
     $table = $wpdb->prefix.mc_products_sales::DB_TABLE_INVOICE;
-    $meta_keys = Stockist::MK_STOCKIST_ID;
+    $meta_keys = SKTYPE::MK_STOCKIST_ID;
     
     $sql = "SELECT FORMAT(SUM(`total_amount`) / COUNT(*),2) as 'avg' FROM $table WHERE `stockist_id`=%d";
     
