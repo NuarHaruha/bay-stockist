@@ -1,0 +1,94 @@
+.stockist_page_mc_stockist_settings{}
+
+.stockist h2.page-title{
+    background: transparent url('../img/store.png') no-repeat 0% 70%;
+    padding-left: 36px;
+}
+#icon-people{
+    background: url('../img/people-36.png') no-repeat 50% 50%;
+}
+
+.stockist-settings #poststuff .inside,
+.stockist #poststuff .inside{
+    padding: 0pt;
+    margin:0pt;
+}
+
+.stockist-settings #poststuff .inside p,
+.stockist #poststuff .inside p{
+    padding: 0px 10px 1em;
+}
+
+.stockist-settings #poststuff .inside input[disabled],
+.stockist #poststuff .inside input[disabled],
+.stockist #poststuff .inside .disabled{
+    background-color: transparent !important;
+    border: 0pt;
+}
+
+.stockist #poststuff .inside *.disabled{
+    background-color: transparent !important;
+    border: 0pt;
+}
+
+.stockist-settings #poststuff .inside th abbr,
+.stockist #poststuff .inside th abbr{
+    border-bottom: 1px #aaa dashed;
+    cursor: pointer;
+}
+
+.add-stockist #poststuff label{
+    font-family: Arial, serif;
+    font-size: 80%;
+    font-weight: 700;
+}
+
+.add-stockist #poststuff .widefat input.code{
+    margin-right: 10px;
+}
+
+.add-stockist #poststuff .nobot{
+    border-bottom: 0pt;
+}
+.add-stockist #poststuff .inner-td{
+    padding: 5px 0px 0px;
+}
+
+.dn{display: none}
+.db{display:block}
+
+.toggle-district{
+    font-weight:700;
+    color:#333
+}
+
+.muted{
+    color: #bbb;
+    font-weight: 400;
+}
+
+.stockist-settings input.normal-text{
+    width: 100%;
+    font-family: Consolas,Monaco,monospace;
+}
+
+.width-85{
+    width: 85%;
+}
+
+.stockist #poststuff .widefat input:focus,
+.stockist #poststuff .widefat textarea:focus{
+    background-color: lightyellow;
+}
+
+.error .block{
+    padding: 0px 10px;
+}
+
+.stockist #poststuff .widefat .invalid{
+    color: #8b0000;
+}
+
+.stockist #poststuff .widefat .valid{
+    color: #006400;
+}
