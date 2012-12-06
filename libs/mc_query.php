@@ -1,5 +1,26 @@
 <?php
 
+/** save sales bonus */
+function ajax_save_stockist_sales_bonus(){
+
+    $result = false;
+
+    $meta = get_option(SKTYPE::MK_SALES_BONUS, array());
+
+    foreach(array('type','state','district','mobile') as $key ){
+        if (isset($_POST[$key])){
+            $meta[$key] = $_POST[$key];
+        }
+    }
+
+    update_option(SKTYPE::MK_SALES_BONUS, $meta);
+
+    $result = (count($meta)>=0 ) ? 1 : 0;
+
+    echo json_encode(array('success'=> $result));
+    exit();
+}
+
 /** save bonus registration */
 function ajax_save_stockist_registration_bonus(){
 
