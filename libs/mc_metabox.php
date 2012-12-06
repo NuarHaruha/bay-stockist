@@ -428,6 +428,7 @@ function mb_view_stockist_sales_bonus_options($post=false, $options=false){
     <tfoot>
         <tr>
             <th colspan="2">
+                <div id="msg-sales"><small class="code" style="float:right;padding-right:10px"></small></div>
                 <button class="button-primary save-bonus-sales">Save changes</button>
             </th>
         </tr>
