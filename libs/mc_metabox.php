@@ -12,11 +12,46 @@
  */
 
 /**
+ *  stockist sponsor, form
+ */
+function mb_add_stockist_sponsor($post = false, $options = false){
+    unset($post, $options); // placeholder
+    ?>
+<table class="widefat nobot">
+    <tbody>
+    <tr valign="top">
+        <th scope="row" style="width:30%">
+            <label for="nama_penaja">Name</label>
+        </th>
+        <td>
+            <input id="nama_penaja" type="text" name="nama_penaja" value="" class="code" style="width: 94%">
+        </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row">
+            <label for="id_penaja">ID #</label>
+        </th>
+        <td>
+            <input id="id_penaja" type="text" name="id_penaja" value="" class="code" style="width: 94%">
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script>
+    jQuery(document).ready(function($){
+    });
+</script>
+<?php
+}
+
+/**
  *  stockist type, form
  */
 function mb_add_stockist_type($post = false, $options = false){
     unset($post, $options); // placeholder
 ?>
+<input type="hidden" name="<?php echo SKTYPE::MK_USERTYPE_STOCKIST;?>" value="on">
+<input type="hidden" name="status_option_active" value="on">
 <table class="widefat nobot">
     <tbody>
     <tr valign="top">
@@ -29,30 +64,31 @@ function mb_add_stockist_type($post = false, $options = false){
     <tr valign="top">
         <th scope="row" colspan="2">
             <label for="stockist_district" title="Stokis Daerah">
-                <input id="stockist_district" type="radio" name="stockist_type" value="<?php echo SKTYPE::ST_DISTRICT;?>">  District Stockist
+                <input data-target="#daerah" id="stockist_district" type="radio" name="stockist_type" value="<?php echo SKTYPE::ST_DISTRICT;?>">  District Stockist
             </label>
         </th>
     </tr>
     <tr valign="top">
         <th scope="row" colspan="2">
             <label for="stockist_state" title="Stokis Daerah">
-                <input id="stockist_state" type="radio" name="stockist_type" value="<?php echo SKTYPE::ST_STATE;?>">  State Stockist
+                <input data-target="#negeri" id="stockist_state" type="radio" name="stockist_type" value="<?php echo SKTYPE::ST_STATE;?>">  State Stockist
             </label>
         </th>
     </tr>
     <tr valign="top">
         <th scope="row" colspan="2">
             <label for="stockist_hq" title="Stokis HQ">
-                <input id="stockist_hq" type="radio" name="stockist_type" value="<?php echo SKTYPE::ST_HQ;?>">  Regional Stockist <span class="muted">(HQ)</span>
+                <input data-target="#negara" id="stockist_hq" type="radio" name="stockist_type" value="<?php echo SKTYPE::ST_HQ;?>">  Regional Stockist <span class="muted">(HQ)</span>
             </label>
         </th>
     </tr>
     </tbody>
     <tfoot>
-        <tr>
+        <tr id="reserved_code" class="dn">
             <th colspan="2" align="center">
                 <label for="reserved_id" style="padding-left: 10px">Reserved ID #</label>
-                <input id="reserved_id" type="text" name="reserved_id" class="code" style="width: 150px;padding: 2px 0px;">
+                <input id="reserved_id" type="text" name="reserved_id" class="code disabled" value="" style="width: 150px;padding: 2px 2px;">
+                <input type="hidden" name="account_id">
             </th>
         </tr>
     </tfoot>
@@ -127,7 +163,7 @@ function mb_add_stockist_actions($post = false, $options = false){
 <input type="hidden" name="section" value="add-stockist">
     <table class="widefat nobot">
         <tbody>
-            <tr valign="top">
+            <tr valign="top" id="valid-tel" class="dn">
                 <th scope="row" colspan="2">
                     <label for="send_sms">
                         <input id="send_sms" type="checkbox" name="send_sms"> Send SMS Notification
@@ -172,26 +208,40 @@ function mb_add_stockist_login_info($post = false, $options = false){
                     <label for="user_login">Login Name</label>
                 </th>
                 <td style="width:30%">
-                    <input type="text" id="user_login" name="user_login" value="" class="regular-text code">
+                    <input type="text" id="user_login" name="user_login" value="" class="regular-text code width-85">
+                    <small id="msg-login-empty" class="description dn invalid"><br><i class="icon-warning-sign"></i> Required, Login Name is empty.</small>
                 </td>
                 <th scope="row" style="width:20%">
                     <label for="user_pass">Password</label>
                 </th>
                 <td style="width:30%">
-                    <input type="password" id="user_pass" name="user_pass" value="" class="regular-text code">
+                    <input type="password" id="user_pass" name="user_pass" value="" class="regular-text code width-85">
                 </td>
             </tr>
         <tr valign="top">
-            <td colspan="2"></td>
+            <td colspan="2" align="center">
+                <small id="msg-login-valid" class="dn valid">
+                    <i class="icon-ok-sign"></i> Username Available!
+                </small>
+                <small id="msg-login-invalid" class="dn invalid">
+                    <i class="icon-warning-sign"></i> Username Exists! please choose different name
+                </small>
+                <small id="msg-min-len" class="dn invalid"><br>
+                    <i class="icon-warning-sign"></i> At least 3 characters: letters, numbers, - or  _ .
+                </small>
+            </td>
             <th scope="row" style="width:20%">
                 <label for="user_pass2">Confirm Password</label>
             </th>
             <td style="width:30%">
-                <input type="password" id="user_pass2" name="user_pass2" value="" class="regular-text code">
+                <input type="password" id="user_pass2" name="user_pass2" value="" class="regular-text code width-85">
+                <small id="msg-pwd" class="description dn invalid"><i class="icon-warning-sign"></i> unmatched password, please re-enter your password.</small>
+                <small id="msg-pwd-empty" class="description dn invalid"><br><i class="icon-warning-sign"></i> Required, password is empty.</small>
             </td>
         </tr>
         </tbody>
     </table>
+
 <?php
 }
 
@@ -212,6 +262,7 @@ function mb_add_stockist_contact_info($post= false, $options= false){
         </th>
         <td style="width:30%">
             <input type="text" id="nama_penuh" name="nama_penuh" value="" class="regular-text code">
+            <small id="msg-name-empty" class="description dn invalid"><br><i class="icon-warning-sign"></i> Required, Full Name is empty.</small>
         </td>
         <th scope="row" style="width:20%">
             <label for="nric">NRIC No. # <span class="muted">(K/P)</span></label>
@@ -228,10 +279,10 @@ function mb_add_stockist_contact_info($post= false, $options= false){
             <input type="text" id="user_email" name="user_email" value="" class="regular-text code">
         </td>
         <th scope="row" style="width:20%">
-            <label for="tel_mobile">Tel. <span class="muted">(Mobile)</span></label>
+            <label for="tel">Tel. <span class="muted">(Mobile)</span></label>
         </th>
         <td style="width:30%">
-            <input type="text" id="tel_mobile" name="tel_mobile" value="" class="regular-text code">
+            <input type="text" id="tel" name="tel" value="" class="regular-text code">
         </td>
     </tr>
     <tr><td colspan="4"></td></tr>
@@ -246,7 +297,7 @@ function mb_add_stockist_contact_info($post= false, $options= false){
             <label for="daerah">District <span class="muted">(Daerah)</span></label>
         </th>
         <td style="width:30%">
-            <select id="daerah" name="daerah" class="width-85">
+            <select id="daerah" name="daerah" class="width-85 select-location" data-target="#district">
             <?php if(empty($districts)):?>
                 <option>not available</option>
             <?php else: ?>
@@ -254,7 +305,7 @@ function mb_add_stockist_contact_info($post= false, $options= false){
                     <optgroup label="<?php echo $s->name;?>">
                     <?php foreach($districts as $index_d => $d): ?>
                         <?php if ($s->state_id == $d->state_id): ?>
-                        <option value="<?php echo $d->district_id; ?>"><?php echo $d->name; ?></option>
+                        <option value="<?php echo $d->district_id; ?>" data-state="<?php echo $d->state_id;?>" data-country="<?php echo $s->country_id;?>"><?php echo $d->name; ?></option>
                         <?php endif; ?>
                     <?php endforeach; // end.districts ?>
                     </optgroup>
@@ -263,7 +314,7 @@ function mb_add_stockist_contact_info($post= false, $options= false){
             </select>
             <a class="" href="<?php echo SKTYPE::URI_PANEL_DSETTINGS;?>"><i class="icon-plus-sign"></i> Add</a>
             <div class="inner-td">
-             <input type="text" id="postcode" name="postcode" value="" class="regular-text code" placeholder="Postcode">
+             <input type="text" id="poskod" name="poskod" value="" class="regular-text code" placeholder="Postcode">
             </div>
         </td>
     </tr>
@@ -272,7 +323,7 @@ function mb_add_stockist_contact_info($post= false, $options= false){
             <label for="negeri">State <span class="muted">(Negeri)</span></label>
         </th>
         <td style="width:30%">
-            <select id="negeri" name="negeri" class="width-85">
+            <select id="negeri" name="negeri" class="width-85 select-location" data-target="#state">
                 <?php if(empty($states)):?>
                 <option>not available</option>
                 <?php else: ?>
@@ -280,7 +331,7 @@ function mb_add_stockist_contact_info($post= false, $options= false){
                     <optgroup label="<?php echo $c->name;?>">
                      <?php foreach($states as $index_s => $s): ?>
                         <?php if ($c->country_id == $s->country_id): ?>
-                        <option value="<?php echo $s->state_id; ?>"><?php echo $s->name; ?></option>
+                        <option value="<?php echo $s->state_id; ?>" data-country="<?php echo $s->country_id;?>"><?php echo $s->name; ?></option>
                         <?php endif; ?>
                      <?php endforeach; // end.states ?>
                     </optgroup>
@@ -293,7 +344,7 @@ function mb_add_stockist_contact_info($post= false, $options= false){
             <label for="negara">Country <span class="muted">(Negara)</span></label>
         </th>
         <td style="width:30%">
-            <select id="negara" name="negara" class="width-85">
+            <select id="negara" name="negara" class="width-85 select-location" data-target="#country">
                 <?php if(empty($country)):?>
                 <option>not available</option>
                 <?php else: ?>
@@ -307,6 +358,9 @@ function mb_add_stockist_contact_info($post= false, $options= false){
     </tr>
     </tbody>
 </table>
+<input id="district" type="hidden" name="district" value="">
+<input id="state" type="hidden" name="state" value="">
+<input id="country" type="hidden" name="country" value="">
 <?php
 }
 
