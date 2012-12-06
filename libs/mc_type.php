@@ -60,7 +60,8 @@ final class SKTYPE
     const MK_USERMETA_SETTINGS      = 'stockist_usermeta_settings';
 
     const MK_ADD_NEW                = "tel,nama_penuh,nric,alamat,daerah,poskod,negeri,negara,nama_bank,no_bank,cawangan_bank,jenis_akaun_bank,id_penaja,nama_penaja,send_sms,send_email,stockist_type,status_option_active,user_type_option_stokis,district,state,country,account_id,reserved_id";
-    
+
+    const MK_REGISTER_BONUS         = 'stockist_register_bonus';
     /**
      * slug 
      */   
@@ -79,6 +80,8 @@ final class SKTYPE
     const ACT_DEL_STATE             = 'delete_state';
 
     const ACT_DEL_DISTRICT          = 'delete_district';
+
+    const ACT_LIST                  = 'stockist_list';
 
     /**
      * URI REDIRECT
@@ -105,6 +108,14 @@ final class SKTYPE
     const PANEL_STATE               = 'state-settings';
 
     const PANEL_DISTRICT            = 'district-settings';
+
+    const PANEL_LIST_ALL            = 'general-list';
+
+    const PANEL_LIST_STATE          = 'state-list';
+
+    const PANEL_LIST_DISTRICT       = 'district-list';
+
+    const PANEL_LIST_MOBILE         = 'mobile-list';
 
     /**
      *  Stockist type, register enum
