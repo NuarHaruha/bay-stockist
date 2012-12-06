@@ -30,7 +30,7 @@ function count_stockist_members($stockist_id){
     global $wpdb;
     
     $table = $wpdb->usermeta;
-    $meta_keys = Stockist::MK_STOCKIST_ID;
+    $meta_keys = SKTYPE::MK_STOCKIST_ID;
     
     $sql = "SELECT COUNT(*) FROM $table WHERE `meta_key`=%s AND `meta_value`=%s";
     
@@ -43,7 +43,7 @@ function total_stockist_sales($stockist_id){
     $stockist_id = (int) $stockist_id;
     
     $table = $wpdb->prefix.mc_products_sales::DB_TABLE_INVOICE;
-    $meta_keys = Stockist::MK_STOCKIST_ID;
+    $meta_keys = SKTYPE::MK_STOCKIST_ID;
     
     $sql = "SELECT FORMAT(SUM(`total_amount`),2) FROM $table WHERE `stockist_id`=%d";
     
@@ -56,7 +56,7 @@ function count_stockist_sales($stockist_id){
     $stockist_id = (int) $stockist_id;
     
     $table = $wpdb->prefix.mc_products_sales::DB_TABLE_INVOICE;
-    $meta_keys = Stockist::MK_STOCKIST_ID;
+    $meta_keys = SKTYPE::MK_STOCKIST_ID;
     
     $sql = "SELECT COUNT(*) FROM $table WHERE `stockist_id`=%d";
     
