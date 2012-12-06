@@ -101,6 +101,7 @@ class Stockist
     {        
         add_action('admin_init', array(&$this, 'admin_stylesheets'));
         add_action('admin_init', array(&$this, 'admin_ajax_scripts'));
+        add_action('admin_init', array(&$this, 'register_admin_scripts'));
         add_action('admin_menu', array(&$this,'registerAdminMenu'));
         add_action('add_meta_boxes', array(&$this,'init_settings_metabox'));
         add_action('add_meta_boxes', array(&$this,'init_add_stockist_metabox'));
@@ -115,6 +116,8 @@ class Stockist
         add_action('wp_ajax_delete_country', array($this, 'delete_country_by_id'));
         add_action('wp_ajax_delete_state', array($this, 'delete_state_by_id'));
         add_action('wp_ajax_delete_district', array($this, 'delete_district_by_id'));
+        add_action('wp_ajax_username_exists', 'json_is_name_valid');
+        add_action('wp_ajax_reserved_id', 'json_stockist_reserved_id');
     }
     
     private function _loadDefault()
@@ -161,6 +164,12 @@ class Stockist
         add_action('load-'.$hook,  array($this,'save_settings'),9);
         add_action('admin_footer-'.$hook, array($this,'footer_scripts'));
         add_action('admin_print_scripts-' . $hook, array(&$this,'admin_scripts') );
+
+        switch($hook){
+            case $this->page['add']:
+                add_action('admin_print_scripts-' . $hook, array(&$this,'admin_scripts_add_stockist') );
+                break;
+        }
     }
     
     public function get_page()
@@ -234,10 +243,12 @@ class Stockist
         }
     }
 
-    /** register new stockist */
+    /**
+     * register new stockist
+     * @todo add to stockist db
+     */
     public function section_add_stockist($req)
     {
-        //var_dump($req);
         $auto_generate_email = false;
 
         if (empty($req->user_email) ) {
@@ -268,7 +279,8 @@ class Stockist
             'user_email'        => $req->user_email,
             'display_name'      => $req->nama_penuh,
             'nickname'          => $req->user_login,
-            'user_registered'   => date("Y-m-d H:i:s")
+            'user_registered'   => date("Y-m-d H:i:s"),
+            'role'              => SKTYPE::ST_ROLE
         );
 
         foreach($meta as $key=> $value){
@@ -287,12 +299,155 @@ class Stockist
             }
         }
 
-        // check error, but leave email alone
+        if (!empty($this->errors)){
 
+            if (count($this->errors) == 1 && $auto_generate_email == true){
+                // there is one error, with auto generate email as fallback
+                // we proceed with insert
+                $this->_insert_user($meta, $req);
+            }
 
-        if (has_count($this->errors)){
-            add_action('mc_notifications', array($this,'error_notifications'));
+        } else {
+            $this->_insert_user($meta, $req);
         }
+
+        if (is_int($this->last_uid)){
+
+            /**
+             * insert into stockist
+             */
+            $code_id = false;
+
+            switch($req->stockist_type){
+                case SKTYPE::ST_DISTRICT:
+                        $code_id = (int) $req->daerah;
+                    break;
+                case SKTYPE::ST_STATE:
+                        $code_id = (int) $req->negeri;
+                    break;
+                case SKTYPE::ST_HQ:
+                        $code_id = (int)$req->negara;
+                    break;
+            }
+
+
+            $stockist = array(
+                'stockist_uid'  => $this->last_uid,
+                'stockist_code' => $req->reserved_id,
+                'type'          => $req->stockist_type,
+                'prefix'        => get_stockist_prefix($req->stockist_type, $code_id),
+                'status'        => 'active',
+                'country_id'    => (int) $req->negara,
+                'state_id'      => (int) $req->negeri,
+                'district_id'   => (int) $req->daerah
+            );
+
+            $this->add_stockist($stockist);
+
+            /**
+             * insert into wp usermeta
+             */
+
+            $usermeta = array();
+
+            // prepare usermeta data items, with default value
+            foreach( SKTYPE::STR_A(SKTYPE::MK_ADD_NEW) as $key){
+                if (isset($req->$key)){
+                    $usermeta[$key] = $req->$key;
+                }
+            }
+
+            /**
+             * convert to to WP-CRM  data structure
+             */
+            foreach($usermeta as $meta_key => $value){
+
+                switch($meta_key):
+                    case 'negeri':
+                            $state = str_nospace($req->state);
+                            $meta_key = sprintf('%s_option_%s',$meta_key, $state);
+                            $value = 'on';
+                        break;
+                    case 'negara':
+                            $country = str_nospace($req->country);
+                            $meta_key = sprintf('%s_option_%s',$meta_key, $country);
+                            $value = 'on';
+                        break;
+                    case 'stockist_type':
+                            $type = '';
+                            switch($value){
+                                case SKTYPE::ST_DISTRICT: $type = 'daerah';
+                                    break;
+                                case SKTYPE::ST_STATE: $type = 'negeri';
+                                    break;
+                                case SKTYPE::ST_MOBILE: $type = 'mobile';
+                                    break;
+                                case SKTYPE::ST_HQ: $type = 'hq';
+                                    break;
+                            }
+
+                            $meta_key = sprintf('jenis_stokis_option_stokis-%s',$type);
+                            $value = 'on';
+                        break;
+                    case 'id_penaja':
+                        $value = strtoupper($value);
+                        break;
+                    case 'district': $value = (int) $req->daerah; break;
+                    case 'state': $value = (int) $req->negeri; break;
+                    case 'country': $value = (int) $req->negara; break;
+                    case 'daerah': $value = $req->district; break;
+                endswitch;
+
+                update_user_meta( $this->last_uid, $meta_key, $value);
+
+            } //end.foreach($usermeta)
+
+            // id
+            update_user_meta( $this->last_uid, 'account_id', $req->reserved_id );
+            /**
+             *  disabled admin bar
+             */
+            update_user_meta( $this->last_uid, 'show_admin_bar_admin', 'false' );
+            update_user_meta( $this->last_uid, 'show_admin_bar_front', 'false' );
+
+        } // end.is_int($this->last_uid)
+
+        add_action('mc_notifications', array($this,'error_notifications'));
+
+        wp_redirect(SKTYPE::URI_LIST_STOCKIST);
+        exit();
+
+    }
+
+
+    public function add_stockist($meta, $format= array('%d','%s','%s','%s','%s','%d','%d','%d'))
+    {   global $wpdb;
+
+        $db = SKTYPE::DB(SKTYPE::DB_PRIMARY);
+
+        $meta = apply_filters('before_insert_stockist', $meta);
+
+        $wpdb->insert($db, $meta, $format);
+
+        do_action('after_insert_stockist', $wpdb->insert_id, $meta);
+
+    }
+
+    private function _insert_user($meta, $req)
+    {
+        $meta = apply_filters('before_insert_stockist', $meta);
+
+        $this->last_uid = wp_insert_user($meta);
+
+        // wp return int of user_id on successful insert.
+        if (is_int($this->last_uid) ){
+            // active hook, user_register
+            do_action('after_insert_stockist', $this->last_uid, array($meta,$req) );
+        } else {
+            do_action('failed_insert_stockist', $this->last_uid, array($meta,$req) );
+        }
+
+        return $this->last_uid;
     }
 
     private function _add_error($msg)
@@ -585,6 +740,11 @@ class Stockist
         $cb     = 'mb_add_stockist_type';
         add_meta_box($mid, $title, $cb, $hook, 'side', 'default', $args);
 
+        $mid    = 'opt_stockist_sponsor';
+        $title  = 'Sponsor';
+        $cb     = 'mb_add_stockist_sponsor';
+        add_meta_box($mid, $title, $cb, $hook, 'side', 'low', $args);
+
         /** help screen */
         if ($current_screen->id == $hook){
             $this->add_help_tab(array(
@@ -724,6 +884,15 @@ class Stockist
     {
         wp_register_style( 'mc_base_stylesheet', plugins_url('/libs/stylesheet.css', __FILE__), array('font-awesome') );
     }
+
+    public function register_admin_scripts()
+    {
+        $src = plugins_url('/js/jquery.maskedinput-1.3.min.js', __FILE__);
+        wp_register_script('jquery-mask', $src, array('jquery'),false,true);
+
+        $src = plugins_url('/js/form-validation.js', __FILE__);
+        wp_register_script('stockist-validation', $src, array('jquery'),false,true);
+    }
     
     public function admin_styles()
     {
@@ -734,6 +903,11 @@ class Stockist
     public function admin_scripts()
     {
         wp_enqueue_script( 'thickbox' );
+    }
+
+    public function admin_scripts_add_stockist(){
+        wp_enqueue_script( 'jquery-mask' );
+        wp_enqueue_script( 'stockist-validation' );
     }
 
     public function panel_add()
