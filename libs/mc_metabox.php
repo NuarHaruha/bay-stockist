@@ -375,10 +375,9 @@ function mb_add_stockist_contact_info($post= false, $options= false){
 
 /** stockist product sales pv bonus */
 function mb_view_stockist_sales_bonus_options($post=false, $options=false){
-    unset($post); // not used, placeholder
+    unset($post, $options); // not used, placeholder
 
-    list($meta, $default) = $options['args'];
-    $meta = (!empty($meta)) ? $meta : $default;
+    $meta = get_option(SKTYPE::MK_SALES_BONUS, array());
     $m = foreach_push(new stdClass(), $meta);
     ?>
 <table class="widefat">
@@ -398,6 +397,11 @@ function mb_view_stockist_sales_bonus_options($post=false, $options=false){
                 <option value="PV">PV</option>
                 <option value="PERCENT">PERCENT</option>
             </select>
+            <script>
+                (function($) {
+                    $('#sales_bonus_type').val('<?php echo $m->type; ?>');
+                })(jQuery);
+            </script>
         </td>
     </tr>
     <tr valign="top">
@@ -405,7 +409,7 @@ function mb_view_stockist_sales_bonus_options($post=false, $options=false){
             <label for="state_sales_bonus">State</label>
         </th>
         <td style="width: 30%">
-            <input type="text" value="<?php echo $m->state_sales_bonus;?>" id="state_sales_bonus" name="state_sales_bonus" class="code">
+            <input type="text" value="<?php echo $m->state;?>" id="state_sales_bonus" name="state_sales_bonus" class="code">
         </td>
     </tr>
     <tr valign="top">
@@ -413,7 +417,7 @@ function mb_view_stockist_sales_bonus_options($post=false, $options=false){
             <label for="district_sales_bonus">District</label>
         </th>
         <td style="width: 30%">
-            <input type="text" value="<?php echo $m->district_register_bonus;?>" id="district_sales_bonus" name="district_sales_bonus" class="code">
+            <input type="text" value="<?php echo $m->district;?>" id="district_sales_bonus" name="district_sales_bonus" class="code">
         </td>
     </tr>
     <tr valign="top">
@@ -421,7 +425,7 @@ function mb_view_stockist_sales_bonus_options($post=false, $options=false){
             <label for="mobile_sales_bonus">Mobile</label>
         </th>
         <td style="width: 30%">
-            <input type="text" value="<?php echo $m->mobile_sales_bonus;?>" id="mobile_sales_bonus" name="mobile_sales_bonus" class="code">
+            <input type="text" value="<?php echo $m->mobile;?>" id="mobile_sales_bonus" name="mobile_sales_bonus" class="code">
         </td>
     </tr>
     </tbody>
