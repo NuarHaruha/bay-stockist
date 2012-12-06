@@ -1,4 +1,14 @@
 <?php
+/**
+ * @author Nuarharuha
+ * @version 0.1
+ * @since 0.1
+ */
+
+function get_stockist_code(){
+
+}
+
 function settings_tabs( $current = 'general-settings' ) {
     $tabs = array(
         'general-settings'   => 'Settings',

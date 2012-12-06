@@ -10,7 +10,7 @@
     <h2 class="">New Stockist</h2>
     <?php settings_errors(); ?>
     <?php do_action('mc_notifications',$_REQUEST);?>
-    <form name="stockist_add" method="post">
+    <form id="stockist_add" name="stockist_add" method="post">
         <input type="hidden" name="action" value="<?php echo SKTYPE::ACT_NEW;?>">
         <?php wp_nonce_field(SKTYPE::NONCES_STOCKIST);
         /* Used to save closed meta boxes and their order */

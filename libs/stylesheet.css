@@ -20,8 +20,14 @@
 }
 
 .stockist-settings #poststuff .inside input[disabled],
-.stockist #poststuff .inside input[disabled]{
-    background: transparent;
+.stockist #poststuff .inside input[disabled],
+.stockist #poststuff .inside .disabled{
+    background-color: transparent !important;
+    border: 0pt;
+}
+
+.stockist #poststuff .inside *.disabled{
+    background-color: transparent !important;
     border: 0pt;
 }
 
@@ -48,7 +54,9 @@
     padding: 5px 0px 0px;
 }
 
+.dn{display: none}
 .db{display:block}
+
 .toggle-district{
     font-weight:700;
     color:#333
@@ -75,4 +83,12 @@
 
 .error .block{
     padding: 0px 10px;
+}
+
+.stockist #poststuff .widefat .invalid{
+    color: #8b0000;
+}
+
+.stockist #poststuff .widefat .valid{
+    color: #006400;
 }
