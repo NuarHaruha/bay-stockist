@@ -368,6 +368,147 @@ function mb_add_stockist_contact_info($post= false, $options= false){
  * section general-settings
  */
 
+/**
+ *  stockist bonus settings metabox
+ */
+
+
+/** stockist product sales pv bonus */
+function mb_view_stockist_sales_bonus_options($post=false, $options=false){
+    unset($post); // not used, placeholder
+
+    list($meta, $default) = $options['args'];
+    $meta = (!empty($meta)) ? $meta : $default;
+    $m = foreach_push(new stdClass(), $meta);
+    ?>
+<table class="widefat">
+    <tbody>
+    <tr valign="middle">
+        <td colspan="2">
+            <i class=" icon-bookmark-empty"></i> Bonus receive for every sales.
+        </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row" style="width:20%">
+            <label for="sales_bonus_type">Currency</label>
+        </th>
+        <td style="width: 30%">
+            <select id="sales_bonus_type" name="sales_bonus_type">
+                <option value="RM">RM</option>
+                <option value="PV">PV</option>
+                <option value="PERCENT">PERCENT</option>
+            </select>
+        </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row" style="width:20%">
+            <label for="state_sales_bonus">State</label>
+        </th>
+        <td style="width: 30%">
+            <input type="text" value="<?php echo $m->state_sales_bonus;?>" id="state_sales_bonus" name="state_sales_bonus" class="code">
+        </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row" style="width: 20%">
+            <label for="district_sales_bonus">District</label>
+        </th>
+        <td style="width: 30%">
+            <input type="text" value="<?php echo $m->district_register_bonus;?>" id="district_sales_bonus" name="district_sales_bonus" class="code">
+        </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row" style="width: 20%">
+            <label for="mobile_sales_bonus">Mobile</label>
+        </th>
+        <td style="width: 30%">
+            <input type="text" value="<?php echo $m->mobile_sales_bonus;?>" id="mobile_sales_bonus" name="mobile_sales_bonus" class="code">
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2">
+                <button class="button-primary save-bonus-sales">Save changes</button>
+            </th>
+        </tr>
+    </tfoot>
+</table>
+<?php
+}
+
+/** stockist registration bonus */
+function mb_view_stockist_register_bonus_options($post=false, $options=false){
+    unset($post, $options); // not used, placeholder
+
+    $meta = get_option(SKTYPE::MK_REGISTER_BONUS, array());
+    $m = foreach_push(new stdClass(), $meta);
+    ?>
+<input type="hidden" name="section" value="stockist-register-bonus">
+<table class="widefat">
+    <tbody>
+    <tr valign="middle">
+        <td colspan="2">
+            <i class=" icon-bookmark-empty"></i> Bonus receive for every members registration.
+        </td>
+    </tr>
+    <tr valign="top">
+    <th scope="row" style="width:20%">
+        <label for="sales_bonus_type">Currency</label>
+    </th>
+    <td style="width: 30%">
+        <select id="register_bonus_type" name="register_bonus_type">
+            <option value="RM">RM</option>
+            <option value="PV">PV</option>
+            <option value="PERCENT">PERCENT</option>
+        </select>
+        <?php if(isset($m->type)):?>
+        <script>
+            (function($) {
+                $('#register_bonus_type').val('<?php echo $m->type; ?>');
+            })(jQuery);
+        </script>
+        <?php endif; ?>
+    </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row" style="width:20%">
+            <label for="state_register_bonus">State</label>
+        </th>
+        <td style="width: 30%">
+            <input type="text" value="<?php echo $m->state;?>" id="state_register_bonus" name="state_register_bonus" class="code">
+        </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row" style="width: 20%">
+            <label for="district_register_bonus">District</label>
+        </th>
+        <td style="width: 30%">
+            <input type="text" value="<?php echo $m->district;?>" id="district_register_bonus" name="district_register_bonus" class="code">
+        </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row" style="width: 20%">
+            <label for="mobile_register_bonus">Mobile</label>
+        </th>
+        <td style="width: 30%">
+            <input type="text" value="<?php echo $m->mobile;?>" id="mobile_register_bonus" name="mobile_register_bonus" class="code">
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="2">
+            <div id="msg-register"><small class="code" style="float:right;padding-right:10px"></small></div>
+            <button class="button-primary save-bonus-register">Save changes</button>
+        </th>
+    </tr>
+    </tfoot>
+</table>
+    <script></script>
+<?php
+}
+
+
 function mb_view_stockist_general_options($post=false, $options=false){
     unset($post); // not used, placeholder
 
