@@ -8,6 +8,10 @@
     background: url('../img/people-36.png') no-repeat 50% 50%;
 }
 
+#icon-stockist{
+    background: url('../img/store.png') no-repeat 50% 50%;
+}
+
 .stockist-settings #poststuff .inside,
 .stockist #poststuff .inside{
     padding: 0pt;
