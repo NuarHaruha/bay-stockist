@@ -1,4 +1,116 @@
 <?php
+
+function json_stockist_reserved_id()
+{
+    $type = $_POST['type'];
+    $id   = (int) $_POST['id'];
+
+    echo json_encode(array('code'=>get_stockist_new_id($type, $id)));
+    exit();
+}
+
+function get_stockist_new_id($type=SKTYPE::ST_DISTRICT, $id = false){
+    global $wpdb;
+
+    if (!$type) return false;
+
+    $db = SKTYPE::DB(SKTYPE::DB_PRIMARY);
+    $result  = 0;
+    $whereto = 'district_id';
+
+    switch ($type){
+        case SKTYPE::ST_STATE:
+            $whereto = 'state_id';
+            break;
+        case SKTYPE::ST_DISTRICT:
+            $whereto = 'district_id';
+           break;
+        case SKTYPE::ST_MOBILE:
+            $whereto = 'type';
+            $id      = SKTYPE::ST_MOBILE;
+            break;
+        case SKTYPE::ST_HQ:
+            $whereto = "type='hq' AND country_id";
+            break;
+    }
+
+    $sql = "SELECT count(*) FROM $db WHERE $whereto=%d";
+
+    $result = $wpdb->get_var($wpdb->prepare($sql, $id));
+
+    if (empty($result)){
+        $result = 0;
+    }
+
+    $code   = ($result + 1);
+    $prefix = get_stockist_prefix($type, $id);
+    $pad    = pad_prefix($code);
+
+    $code   = apply_filters('get_stockist_new_id', $prefix.'-'.$pad.$code);
+
+    return  $code;
+}
+
+function pad_prefix($code){
+    $code = (int) $code;
+    $pad = (($code <= 9) ? '000' : ($code <= 99) ? '00' : ($code <= 999) ? '0' : '');
+    return $pad;
+}
+
+function get_stockist_prefix($type, $id){
+    global $wpdb;
+
+    if (!$type) return false;
+    $prefix = $db = $whereto = false;
+
+    switch($type){
+        case SKTYPE::ST_STATE:
+            $db = SKTYPE::DB(SKTYPE::DB_STATE);
+            $whereto = 'state_id';
+            break;
+        case SKTYPE::ST_DISTRICT:
+            $db = SKTYPE::DB(SKTYPE::DB_DISTRICT);
+            $whereto = 'district_id';
+            break;
+        case SKTYPE::ST_HQ:
+            $db = SKTYPE::DB(SKTYPE::DB_COUNTRY);
+            $whereto = 'country_id';
+            break;
+        case SKTYPE::ST_MOBILE:
+            $prefix = SKTYPE::PREFIX_MOBILE;
+            break;
+    }
+
+    if ($type != SKTYPE::ST_MOBILE){
+
+        $sql = "SELECT * FROM $db WHERE $whereto=%d";
+        $result = $wpdb->get_results($wpdb->prepare($sql,$id));
+
+        if ($result){
+            $result = $result[0];
+            switch($type){
+                case SKTYPE::ST_HQ:
+                    $prefix = SKTYPE::PREFIX_HQ .$result->iso;
+                    break;
+                case SKTYPE::ST_STATE:
+                    $prefix = SKTYPE::PREFIX_STATE.$result->iso;
+                    break;
+                case SKTYPE::ST_DISTRICT:
+                    // find state iso code
+                    $db     = SKTYPE::DB(SKTYPE::DB_STATE);
+                    $sql    = "SELECT iso FROM $db WHERE `state_id`=%d";
+                    $iso    = $wpdb->get_var($wpdb->prepare($sql, $result->state_id));
+
+                    $suffix = substr($result->hasc, -2);
+                    $prefix = SKTYPE::PREFIX_DISTRICT.$iso.$suffix;
+                    break;
+            }
+        }
+    }
+
+    return $prefix;
+}
+
 function get_stockist_by_district($district){
     global $wpdb;
 
