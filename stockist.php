@@ -100,6 +100,7 @@ class Stockist
         add_action('wp_ajax_username_exists', 'json_is_name_valid');
         add_action('wp_ajax_reserved_id', 'json_stockist_reserved_id');
         add_action('wp_ajax_stockist_bonus_register', 'ajax_save_stockist_registration_bonus');
+        add_action('wp_ajax_stockist_bonus_sales', 'ajax_save_stockist_sales_bonus');
     }
     
     private function _loadDefault()
