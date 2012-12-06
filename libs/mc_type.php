@@ -62,6 +62,8 @@ final class SKTYPE
     const MK_ADD_NEW                = "tel,nama_penuh,nric,alamat,daerah,poskod,negeri,negara,nama_bank,no_bank,cawangan_bank,jenis_akaun_bank,id_penaja,nama_penaja,send_sms,send_email,stockist_type,status_option_active,user_type_option_stokis,district,state,country,account_id,reserved_id";
 
     const MK_REGISTER_BONUS         = 'stockist_register_bonus';
+
+    const MK_SALES_BONUS            = 'stockist_sales_bonus';
     /**
      * slug 
      */   
