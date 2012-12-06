@@ -5,8 +5,23 @@
  * @since 0.1
  */
 
-function get_stockist_code(){
+/**
+ * heading tab for main list page
+ */
+function stockist_list_tabs( $current = 'general' ) {
+    $tabs = array(
+        'general-list'   => 'All Stockist',
+        'state-list'     => 'State',
+        'district-list'  => 'District'
+    );
 
+    echo '<div id="icon-stockist" class="icon32"><br></div>';
+    echo '<h2 class="nav-tab-wrapper">';
+    foreach( $tabs as $tab => $name ){
+        $class = ( $tab == $current ) ? ' nav-tab-active' : '';
+        echo "<a class='nav-tab$class' href='/wp-admin/admin.php?page=mc_stockist&panel=$tab'>$name</a>";
+    }
+    echo '</h2>';
 }
 
 function settings_tabs( $current = 'general-settings' ) {
