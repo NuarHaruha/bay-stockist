@@ -903,7 +903,7 @@ class Stockist
     
     public function panelAdminSettings()
     {
-        require dirname(__FILE__).'/mc_panel_stockist.php';
+        require dirname(__FILE__).'/panels/lists.php';
     }
     
     public function get_data($type)
