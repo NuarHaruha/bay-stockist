@@ -15,7 +15,10 @@ jQuery(document).ready(function($){
     stvalid.input = {
         login: $('#user_login'), pwd: $('#user_pass'), pwd2: $('#user_pass2'), fname: $('#nama_penuh'),
         tel: $('#tel'), nric: $('#nric'),
-        stype: $("input[name='stockist_type']")
+        stype: $("input[name='stockist_type']"),
+        sldistrict:$('#daerah'),slstate:$('#negeri'),slcountry:$('#negara'),
+        district:$('#district'),state:$('#state'),country:$('#country'),
+        location: $('select.select-location')
     };
 
     /**
@@ -112,17 +115,63 @@ jQuery(document).ready(function($){
     });
 
     stvalid.input.stype.click(function(){
-        if ($('#reserved_code').hasClass('dn')){
-            $('#reserved_code').slideDown('slow').removeClass('dn');
+        hiderow = $('#reserved_code');
+        if (hiderow.hasClass('dn')){
+            hiderow.slideDown('slow').removeClass('dn');
         }
+
+        type_id = $(this).data('target');
+        bid  = false
+
+        if (type_id == ''){
+            bid = 0;
+        } else {
+            bid = $(type_id).val();
+        }
+
+        var params = { action:'reserved_id', type: $(this).val(), id: bid };
+        $.post(ajaxurl, params, function(data){
+                $('#reserved_id').val(data.code);
+            }
+        ,'JSON');
     });
 
+    /**
+     * show send sms notification options
+     * if tel has value with len >= 5
+     * */
     stvalid.input.tel.focusout(function(){
         if ($(this).val().length >=5 ){
             if ($('#valid-tel').hasClass('dn')){
                 $('#valid-tel').fadeIn('slow').removeClass('dn');
             }
         }
+    });
+
+    // select location, update input.targer value
+    // with option:selected text
+    stvalid.input.location.each(function(){
+        update = $(this).data('target'),value  = $(this).find("option:selected").text();
+        $(update).val(value); // set default value on load
+
+        $(this).change(function(){
+            // update hidden data-target value with selected text
+            $($(this).data('target')).val($(this).find("option:selected").text());
+        if (typeof console != "undefined" ){
+            console.log('updated: %s => %s',
+                $(this).data('target'),$($(this).data('target')).val());
+        }
+       });
+    });
+
+    stvalid.input.sldistrict.change(function(){
+        state = $(this).find("option:selected").data('state');
+        console.log('state id: %s', state);
+        stvalid.input.slstate.val(state);
+
+        // update state data
+        cstate = stvalid.input.slstate.find("option:selected").text()
+        stvalid.input.state.val(cstate);
     });
 
     stvalid.form.submit(function(e){
