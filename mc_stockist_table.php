@@ -320,7 +320,9 @@ class mc_stockist_table extends WP_List_Table
 
         $data = $this->getData();
         $datum = array();
-        
+
+        if (!is_array($data)) return false;
+
           foreach ($data as $k => &$v) {
             if (is_numeric($k)) {
                 array_push($datum, $v);
@@ -405,8 +407,26 @@ class mc_stockist_table extends WP_List_Table
     
     public function getData()
     {   global $wpdb, $stockist;
-                                
-        return $stockist->get_data('all');
+
+        $results = false;
+
+        $type = (isset($_REQUEST['panel'])) ? $_REQUEST['panel'] : 'general-list';
+
+        switch($type){
+            case SKTYPE::PANEL_LIST_MOBILE:
+                break;
+            case SKTYPE::PANEL_LIST_DISTRICT:
+                break;
+            case SKTYPE::PANEL_LIST_STATE:
+                    $results = $stockist->get_data(SKTYPE::ST_STATE);
+                break;
+            case SKTYPE::PANEL_LIST_ALL:
+            default:
+                    $results = $stockist->get_data('all');
+                break;
+        }
+
+        return $results;
     }    
     
 }
@@ -424,20 +444,11 @@ class mc_stockist_table extends WP_List_Table
  * it's the way the list tables are used in the WordPress core.
  */
 function mc_render_stockist_page(){
-    
+
+
     //Create an instance of our package class...
     $stockistTable = new mc_stockist_table();
     //Fetch, prepare, sort, and filter our data...
     $stockistTable->prepare_items();
-    
-    ?>       
-        <form id="stockist-filter" method="get">
-            <!-- For plugins, we also need to ensure that the form posts back to our current page -->
-            <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
-            <!-- Now we can render the completed list table -->
-            <?php $stockistTable->display() ?>
-        </form>
-        
-   
-    <?php
+    $stockistTable->display();
 }
