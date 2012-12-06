@@ -58,6 +58,8 @@ final class SKTYPE
     const MK_DEFAULT_SETTINGS       = 'stockist_default_settings';
 
     const MK_USERMETA_SETTINGS      = 'stockist_usermeta_settings';
+
+    const MK_ADD_NEW                = "tel,nama_penuh,nric,alamat,daerah,poskod,negeri,negara,nama_bank,no_bank,cawangan_bank,jenis_akaun_bank,id_penaja,nama_penaja,send_sms,send_email,stockist_type,status_option_active,user_type_option_stokis,district,state,country,account_id,reserved_id";
     
     /**
      * slug 
@@ -91,6 +93,8 @@ final class SKTYPE
 
     const URI_PANEL_GSETTINGS       = '/wp-admin/admin.php?page=mc_stockist_settings&panel=general-settings';
 
+    const URI_LIST_STOCKIST         = '/wp-admin/admin.php?page=mc_stockist';
+
     /**
      * Tab Panel
      */
@@ -110,6 +114,11 @@ final class SKTYPE
     const ST_STATE                  = 'state';
     const ST_HQ                     = 'hq';
 
+    const PREFIX_MOBILE             = 'SM';
+    const PREFIX_DISTRICT           = 'SD';
+    const PREFIX_STATE              = 'SN';
+    const PREFIX_HQ                 = 'HQ';
+
     /**
      *  custom error message
      */
@@ -125,6 +134,8 @@ final class SKTYPE
      * nonces
      */
     const NONCES_STOCKIST           = 0x15e1;
+
+    const ST_ROLE                   = 'stockist';
     /**
      * @uses $wpdb wp database object
      * @author Nuarharuha
@@ -153,5 +164,11 @@ final class SKTYPE
         }
 
         return $name;
-    }    
+    }
+
+    public static function STR_A($str)
+    {
+        $str = trim(strem(' ',$str));
+        return explode(',',$str);
+    }
 }
