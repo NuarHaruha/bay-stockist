@@ -5,7 +5,7 @@
  *
  * User registration functions
  *
- * @author Nuarharuha
+ * @author Nuarharuha <nhnoah+bay-isra@gmail.com>
  * @version 0.1
  * @since 0.1
  */

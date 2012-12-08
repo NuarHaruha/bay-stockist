@@ -2,7 +2,7 @@
 /**
  * stockist metabox
  *
- * @author Nuarharuha
+ * @author Nuarharuha <nhnoah+bay-isra@gmail.com>
  * @version 1.0
  * @since 0.1
  */
