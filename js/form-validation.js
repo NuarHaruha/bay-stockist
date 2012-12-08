@@ -5,7 +5,7 @@
  * @package isralife
  * @category form
  *
- * @author Nuarharuha
+ * @author Nuarharuha <nhnoah+bay-isra@gmail.com>
  * @version 0.1
  */
 var stvalid = {}, releaseSubmit = false;

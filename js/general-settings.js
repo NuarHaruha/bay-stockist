@@ -1,5 +1,5 @@
 /**
- * @author Nuarharuha
+ * @author Nuarharuha <nhnoah+bay-isra@gmail.com>
  * @version 0.1
  */
 
