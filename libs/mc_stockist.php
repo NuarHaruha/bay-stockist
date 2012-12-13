@@ -8,7 +8,7 @@
 /**
  * heading tab for main list page
  */
-function stockist_list_tabs( $current = 'general' ) {
+function stockist_list_tabs( $current = 'general-list' ) {
     $tabs = array(
         'general-list'   => 'All Stockist',
         'state-list'     => 'State',
