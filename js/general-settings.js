@@ -9,9 +9,13 @@ jQuery(document).ready(function($){
 
     stg.msg = function(data, elm){
         if (data.success){
-            $(elm).html('<i class="icon-ok-sign"></i> Update Success').fadeOut(3000);
+            $(elm).html('<i class="icon-ok-sign"></i> Update Success')
+                .fadeIn(2500)
+                .fadeOut(3000);
         } else {
-            $(elm).html('<i class="icon-warning-sign"></i> Update Failed').fadeOut(3000);
+            $(elm).html('<i class="icon-warning-sign"></i> Update Failed')
+                .fadeIn(2500)
+                .fadeOut(3000);
         }
     };
 
@@ -53,6 +57,15 @@ jQuery(document).ready(function($){
       district: $('#district_register_bonus').val(),
       mobile: $('#mobile_register_bonus').val()
     };
+
+    $('button.save-starter-kit').click(function(e){
+        e.preventDefault();
+
+        $.post(ajaxurl, {action: 'stockist_starter_kit',pid: $('#starter_kit').val()},
+            function(data){
+                stg.msg(data,'#msg-starter-kit small');
+        },'JSON');
+    });
 
 
 });
