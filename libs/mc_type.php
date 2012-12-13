@@ -64,6 +64,13 @@ final class SKTYPE
     const MK_REGISTER_BONUS         = 'stockist_register_bonus';
 
     const MK_SALES_BONUS            = 'stockist_sales_bonus';
+
+    /**
+     * meta_key for retrieving
+     * stockist's starter kit product id
+     * @var string
+     */
+    const MK_STARTER_KIT            = 'stockist_starter_kit';
     /**
      * slug 
      */   

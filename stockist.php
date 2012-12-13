@@ -101,6 +101,7 @@ class Stockist
         add_action('wp_ajax_reserved_id', 'json_stockist_reserved_id');
         add_action('wp_ajax_stockist_bonus_register', 'ajax_save_stockist_registration_bonus');
         add_action('wp_ajax_stockist_bonus_sales', 'ajax_save_stockist_sales_bonus');
+        add_action('wp_ajax_stockist_starter_kit', 'ajax_save_starter_kit');
     }
     
     private function _loadDefault()
@@ -801,6 +802,12 @@ class Stockist
     public function default_settings_metabox($hook, $args)
     {
         /* main screen normal */
+
+        $mid    = 'opt_general_starter_kit';
+        $title  = 'Product Settings';
+        $cb     = 'mb_stockist_set_product_settings';
+        add_meta_box($mid, $title, $cb, $hook, 'normal', 'high', $args);
+
         $mid    = 'opt_general_options';
         $title  = 'Database Settings';
         $cb     = 'mb_view_stockist_general_options';

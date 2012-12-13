@@ -368,6 +368,52 @@ function mb_add_stockist_contact_info($post= false, $options= false){
  * section general-settings
  */
 
+
+/**
+ *  Starter Kit Selection
+ */
+function mb_stockist_set_product_settings()
+{
+?>
+    <table class="widefat product-list">
+        <tbody>
+            <tr>
+                <th scope="row"><label for="starter_kit">Starter Kit</label></th>
+                <td>
+                    <select id="starter_kit" name="starter_kit">
+                        <option>select product</option>
+                        <?php
+                        $product_args = array( 'post_type' => 'products');
+                        $loop = new WP_Query( $product_args );
+                        ?>
+                        <?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
+                        <option value="<?php echo get_post()->ID;?>"><?php the_title(); ?></option>
+                        <?php endwhile; wp_reset_query();?>
+                    </select>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="4">
+                <div id="msg-starter-kit"><small style="float:right;padding-right:10px"></small></div>
+                <button class="button-primary save-starter-kit">Save changes</button>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+    <?php if ( ($op = get_option(SKTYPE::MK_STARTER_KIT,false) ) != false ): ?>
+    <script>
+        jQuery(document).ready(function($){
+           $('#starter_kit').val('<?php echo $op; ?>');
+        })
+    </script>
+    <?php endif;?>
+<?php
+}
+
+
 /**
  *  stockist bonus settings metabox
  */

@@ -1,5 +1,33 @@
 <?php
 
+/**
+ * Save starter kit product id
+ *
+ * @todo check nonce
+ * @global string $_POST['pid'] starter kit product id
+ * @return string output json encode results
+ */
+function ajax_save_starter_kit()
+{
+    $result = false;
+
+    $options = get_option(SKTYPE::MK_STARTER_KIT, false);
+
+    if (isset($_POST['pid'])){
+
+        $new_options = $_POST['pid'];
+
+        if (!$options || $new_options != $options){
+            update_option(SKTYPE::MK_STARTER_KIT, $new_options);
+            $result = true;
+        }
+    }
+
+    echo json_encode(array('success'=> $result));
+    exit();
+}
+
+
 /** save sales bonus */
 function ajax_save_stockist_sales_bonus(){
 
