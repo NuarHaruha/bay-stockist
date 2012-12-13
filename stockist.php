@@ -398,6 +398,10 @@ class Stockist
              */
             update_user_meta( $this->last_uid, 'show_admin_bar_admin', 'false' );
             update_user_meta( $this->last_uid, 'show_admin_bar_front', 'false' );
+            $uid = $this->last_uid; // cache it
+            assign_stockist($uid);
+            member_register_downline_bonus($uid);
+            stockist_register_member_bonus(array(), $uid);
 
         } // end.is_int($this->last_uid)
 
