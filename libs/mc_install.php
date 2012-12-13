@@ -24,7 +24,7 @@ function mc_stockist_install_db(){
 		$sql = "CREATE TABLE " . $db . " (
 			  id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
               stockist_uid BIGINT(20) unsigned NOT NULL,
-              stockist_code BIGINT(20) unsigned NOT NULL,
+              stockist_code VARCHAR(255) NOT NULL,
               type ENUM('state','district','mobile','hq') NOT NULL,
 			  prefix VARCHAR(10) NOT NULL,              
               status ENUM('active','inactive') DEFAULT 'active',              
