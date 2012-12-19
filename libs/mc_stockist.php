@@ -119,4 +119,32 @@ function disabled_input($value, $size = 10){
     t('input','', array('value'=> $value, 'size' => $size, 'disabled'=>'disabled'));
 }
 
+/**
+ *  check if current user has permission to register
+ *  valid check for product id availability
+ *  return bool
+ */
+function stockist_can_register(){
 
+    /** rule-out non role check */
+    //if (!current_user_is_stockist()) { return false; }
+
+    // Search for available/reserved product
+    // matching our starter kit
+
+    global $wpdb;
+
+    $uid    = _current_user_id();
+    $pid    = get_option(SKTYPE::MK_STARTER_KIT, false); // @todo fallback, missing pid
+    $db     = PINTYPE::DB(PINTYPE::DB_PRIMARY);
+    $db2    = PINTYPE::DB(PINTYPE::DB_PIN_STOCKIST);
+    $status = PINTYPE::STATUS_RESERVED;
+
+    $sql    = "SELECT count(*) FROM $db e JOIN $db2 s ON e.pin_id = s.pin_id ".
+              "WHERE e.product_id=%d AND e.status=%s AND s.stockist_id=%d";
+
+    $result = $wpdb->get_var($wpdb->prepare($sql, $pid, $status, $uid));
+
+    return ($result) ? true : false;
+
+}
