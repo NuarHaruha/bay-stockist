@@ -378,8 +378,10 @@ function mb_stockist_set_product_settings()
     <table class="widefat product-list">
         <tbody>
             <tr>
-                <th scope="row"><label for="starter_kit">Starter Kit</label></th>
-                <td>
+                <th scope="row">
+                    <label for="starter_kit">Starter Kit</label>
+                </th>
+                <td colspan="2">
                     <select id="starter_kit" name="starter_kit">
                         <option>select product</option>
                         <?php
@@ -391,7 +393,9 @@ function mb_stockist_set_product_settings()
                         <?php endwhile; wp_reset_query();?>
                     </select>
                 </td>
-                <td colspan="2"></td>
+                <td><p class="description">
+                    Select "Starter Kit" product for members activation.
+                </p></td>
             </tr>
         </tbody>
         <tfoot>
