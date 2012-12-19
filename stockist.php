@@ -815,7 +815,7 @@ class Stockist
         $mid    = 'opt_general_options';
         $title  = 'Database Settings';
         $cb     = 'mb_view_stockist_general_options';
-        add_meta_box($mid, $title, $cb, $hook, 'normal', 'high', $args);
+        //add_meta_box($mid, $title, $cb, $hook, 'normal', 'high', $args);
 
         /*  side screen normal */
         $mid    = 'opt_stockist_register_bonus';
